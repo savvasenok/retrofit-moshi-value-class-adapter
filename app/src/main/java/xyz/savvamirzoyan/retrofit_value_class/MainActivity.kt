@@ -32,6 +32,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import xyz.savvamirzoyan.retrofit_value_class.adapters.ValueClassAdapterFactory
+import xyz.savvamirzoyan.retrofit_value_class.model.Email
+import xyz.savvamirzoyan.retrofit_value_class.model.UserId
 import xyz.savvamirzoyan.retrofit_value_class.model.UserModel
 import xyz.savvamirzoyan.retrofit_value_class.network.TestApiService
 import xyz.savvamirzoyan.retrofit_value_class.ui.theme.RetrofitvalueclassTheme
@@ -39,10 +41,7 @@ import xyz.savvamirzoyan.retrofit_value_class.ui.theme.RetrofitvalueclassTheme
 class MainActivity : ComponentActivity() {
 
     private val serializerBuilder by lazy {
-        Moshi.Builder()
-            .add(ValueClassAdapterFactory())
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        Moshi.Builder().add(ValueClassAdapterFactory()).add(KotlinJsonAdapterFactory()).build()
     }
 
     private val converterFactories by lazy {
@@ -74,8 +73,15 @@ class MainActivity : ComponentActivity() {
             RetrofitvalueclassTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        Button(onClick = ::makeRequest) {
-                            Text("Click to get response")
+
+                        Row {
+                            Button(onClick = ::makeRequest) {
+                                Text("Click to get response")
+                            }
+
+                            Button(onClick = ::sendRequest) {
+                                Text("Click to make POST")
+                            }
                         }
 
                         HorizontalDivider()
@@ -109,6 +115,16 @@ class MainActivity : ComponentActivity() {
     fun makeRequest() {
         lifecycleScope.launch {
             users.value = service.getUsers().shuffled().take(3)
+        }
+    }
+
+    fun sendRequest() {
+        lifecycleScope.launch {
+            val id = UserId(123)
+            val name = "John Doe"
+            val username = "john.doe"
+            val email = Email("john.doe@email.com")
+            service.send(UserModel(id, name, username, email))
         }
     }
 }
