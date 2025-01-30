@@ -41,7 +41,9 @@ import xyz.savvamirzoyan.retrofit_value_class.ui.theme.RetrofitvalueclassTheme
 class MainActivity : ComponentActivity() {
 
     private val serializerBuilder by lazy {
-        Moshi.Builder().add(ValueClassAdapterFactory()).add(KotlinJsonAdapterFactory()).build()
+        Moshi.Builder()
+            .add(ValueClassAdapterFactory())
+            .build()
     }
 
     private val converterFactories by lazy {
