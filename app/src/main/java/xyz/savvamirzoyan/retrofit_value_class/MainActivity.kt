@@ -23,14 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import xyz.savvamirzoyan.retrofit_value_class.adapters.ValueClassAdapterFactory
 import xyz.savvamirzoyan.retrofit_value_class.model.Email
 import xyz.savvamirzoyan.retrofit_value_class.model.UserId
@@ -41,16 +39,11 @@ import xyz.savvamirzoyan.retrofit_value_class.ui.theme.RetrofitvalueclassTheme
 class MainActivity : ComponentActivity() {
 
     private val serializerBuilder by lazy {
-        Moshi.Builder()
-            .add(ValueClassAdapterFactory())
-            .build()
+        Moshi.Builder().add(ValueClassAdapterFactory()).build()
     }
 
     private val converterFactories by lazy {
-        listOf(
-            ScalarsConverterFactory.create(),
-            MoshiConverterFactory.create(serializerBuilder),
-        )
+        listOf(MoshiConverterFactory.create(serializerBuilder))
     }
 
     private val retrofit by lazy {
